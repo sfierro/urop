@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Neonatal Screener</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="button_continue">Continue</string>
+    <string name="label_capture">Capture</string>
+    <string name="label_settings">Settings</string>
+    <string name="label_help">Help</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="menu_settings">Settings</string>
+	<string name="menu_upload">Upload</string>
+	<string name="menu_delete">Delete</string>	
+	<string name="label_ok">OK</string>
+	<string name="label_cancel">Cancel</string>
+	<string name="pref_account">account</string>
+	<string name="label_yes">Yes</string>
+	<string name="label_no">No</string>
+	<string name="label_pref_version">Version Information</string>
+    <string name="pref_version">pref_version</string>
+    <string name="pref_delete">pref_delete</string>
+    <string name="pref_white_balance">pref_white_balance</string>
+	<string name="label_pref_white_balance">White Balance</string>
+	<string name="title_preferences">Preferences</string>
+	<string name="pref_anti_banding">pref_anti_banding</string>
+	<string name="label_pref_anti_banding">Anti Banding</string>
+	<string name="pref_color_effects">pref_color_effects</string>
+	<string name="label_pref_color_effects">Color Effects</string>
+	<string name="pref_flash_modes">pref_flash_modes</string>
+	<string name="label_pref_flash_modes">Flash Modes</string>
+	<string name="pref_focus_modes">pref_focus_modes</string>
+	<string name="label_pref_focus_modes">Focus Modes</string>
+	<string name="pref_scene_modes">pref_scene_modes</string>
+	<string name="label_pref_scene_modes">Scene Modes</string>
+	<string name="message_camera_not_found">No camera was found.</string>
+	<string name="message_no_whitebalance_options">There are no available white balance options.</string>
+	<string name="title_adjust_white_balance">White Balance Settings:</string>
+	<string name="message_no_anti_banding_options">There are no available anti banding options.</string>
+	<string name="title_adjust_anti_banding">Anti Banding Settings:</string>
+	<string name="message_no_color_effect_options">There are no available color effects options.</string>
+	<string name="title_adjust_color_effects">Color Effects Settings:</string>
+	<string name="message_no_scene_mode_options">There are no available scene mode options.</string>
+	<string name="title_adjust_scene_mode">Scene Mode Settings:</string>
+	<string name="message_no_flash_mode_options">There are no available flash mode options.</string>
+	<string name="title_adjust_flash_mode">Flash Mode Settings:</string>
+	<string name="message_no_focus_mode_options">There are no available focus mode options.</string>
+	<string name="title_adjust_focus_mode">Focus Mode Settings:</string>
+	<string name="not_supported">Not Supported</string>
+	<string name="label_save">Save</string>
+	<string name="label_delete">Delete</string>
+	<string name="error_sd_unavailable">The SD card is currently unavailable: please check that is correctly plugged in and that it is not mounted on an attached host.</string>
+    <string name="save_success">The data has been successfully saved to %s.</string>
+    <string name="menu_hide_viewfinder">Hide Viewfinder</string>
+    <string name="menu_show_viewfinder">Show Viewfinder</string>
+    <string name="pref_patient_id">pref_patient_id</string>
+    <string name="label_pref_patient_id">Patient Name</string>
+    <string name="label_pref_patient_id_set" formatted="false">Patient Name: %s</string>
+    <string name="label_pref_patient_id_summary">The name of the patient the images should be associated with.</string>
+    <string name="label_pref_camera_settings">Camera Settings</string>
+    <string name="label_pref_patient_settings">Patient Settings</string>
+    <string name="label_pref_image_processing">Image Processing</string>
+    <string name="label_pref_image_processing_summary"></string>
+    <string name="pref_adjust_contrast">pref_adjust_contrast</string>
+    <string name="label_pref_adjust_contrast">Adjust Contrast</string>
+    <string name="label_pref_adjust_contrast_summary">Adjust the image contrast</string>
+    <string name="label_pref_camera_selection">Camera Options</string>
+    <string name="label_pref_camera">Selected Camera</string>
+    <string name="pref_camera">pref_camera</string>
+    <string name="label_camera_choice" formatted="false">Using Camera %s (%s)</string>
+    <string name="label_camera_choice_label" formatted="false">Camera %s (%s)</string>
+    <string name="label_camera_none">No cameras found.</string>
+    <string name="label_choose_camera">Select Camera</string>
+    <string name="label_single_camera">This device only has a single camera: no changes are possible.</string>
+
+	<string name="view_circ_75">75% View</string>
+    <string name="view_circ_50">50% View</string>
+    <string name="view_circ_25">25% View</string>
+    <string name="toggle_red">show red</string>
+	<string name="toggle_blue">show blue</string>
+	<string name="toggle_green">show green</string>
+	<string name="calculate_heart_rate">Calculate Heart Rate</string>
+	<string name="toggle_cont_heart_rate">toggle continuous heart rate</string>
+	<string name="toggle_derivative">toggle derivative</string>
+	<string name="toggle_filtered_signal">show filtered signal</string>
+	<string name="toggle_raw">toggle plot raw</string>
+	<string name="title_select_channel">please select the channel to analyze:</string>
+	<string-array name="channel_options">
+		<item>Red</item>
+		<item>Green</item>
+		<item>Blue</item>
+	</string-array>
+</resources>
