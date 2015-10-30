@@ -6,6 +6,7 @@ import android.app.Activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,6 +46,11 @@ public class MainActivity extends Activity {
     private static final int SETTINGS = 1;
     private SharedPreferences prefs;
     private int channel;
+    private View myView;
+
+    private ProgressDialog _progressDialog;
+    private int _progress = 0;
+    private Handler _progressHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,49 @@ public class MainActivity extends Activity {
         graphviewfinal.setChannel(channel);
         mPreview = new Preview(this, (SurfaceView) findViewById(R.id.preview));
         getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        myView = (View) findViewById(R.id.view);
+        myView.bringToFront();
+        graphviewfinal.bringToFront();
+        Button startButton = (Button) findViewById(R.id.start_btn);
+        startButton.bringToFront();
+        startButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(1);
+                _progress = 0;
+                _progressDialog.setProgress(0);
+                _progressHandler.sendEmptyMessage(0);
+            }
+        });
+
+        /**
+         * start progress thread
+         */
+        _progressHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if(_progress>=26) {
+                    Intent in = new Intent(MainActivity.this,AnalyzeActivity.class);
+                    in.putExtra("hr",graphviewfinal.getHeartRate(false));
+                    startActivity(in);
+//                    Toast.makeText(
+//                            MainActivity.this,
+//                            ""
+//                                    + graphviewfinal.getHeartRate(false),
+//                            Toast.LENGTH_SHORT).show();
+
+
+                } else {
+
+                    if (graphviewfinal.getHeartRate(false) > 40) {
+                        _progress++;
+                        _progressDialog.incrementProgressBy(4);
+                    }
+                    _progressHandler.sendEmptyMessageDelayed(0, 1000);
+                }
+            }
+        };
 
         Button heartRateButton = (Button) findViewById(R.id.heart_rate_button);
         final MainActivity parent = this;
@@ -124,6 +173,37 @@ public class MainActivity extends Activity {
         });
 
     }
+
+    /**
+     * create dialog for taking heart rate
+     */
+    @Deprecated
+    protected Dialog onCreateDialog(int i) {
+
+        _progressDialog = new ProgressDialog(this);
+
+        _progressDialog.setIcon(R.drawable.heartsmall);
+
+        _progressDialog.setTitle("Taking measurements, please wait");
+        _progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        _progressDialog.setProgressNumberFormat(null);
+        _progressDialog.setProgressPercentFormat(null);
+        _progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                _progressHandler.removeMessages(0);
+                _progressDialog.dismiss();
+                Toast.makeText(
+                        MainActivity.this,
+                        ""
+                                + graphviewfinal.getHeartRate(false),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        return _progressDialog;
+    }
+
     @Override
     protected void onResume() {
         final ToggleButton recorderButton = (ToggleButton) findViewById(R.id.recorder_button);
@@ -636,29 +716,29 @@ public class MainActivity extends Activity {
 //      }
 //  }
 
-    private static final int DIALOG_SELECT_CHANNEL = 1;
-
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-        case DIALOG_SELECT_CHANNEL: {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            return builder
-                    .setTitle(getString(R.string.title_select_channel))
-                    .setCancelable(true)
-                    .setSingleChoiceItems(
-                            getResources().getStringArray(
-                                    R.array.channel_options), channel,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                        int item) {
-                                    dialog.dismiss();
-                                    updateChannel(item);
-                                }
-                            }).create();
-        }
-        }
-        return null;
-    }
+//    private static final int DIALOG_SELECT_CHANNEL = 1;
+//
+//    protected Dialog onCreateDialog(int id) {
+//        switch (id) {
+//        case DIALOG_SELECT_CHANNEL: {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            return builder
+//                    .setTitle(getString(R.string.title_select_channel))
+//                    .setCancelable(true)
+//                    .setSingleChoiceItems(
+//                            getResources().getStringArray(
+//                                    R.array.channel_options), channel,
+//                            new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog,
+//                                        int item) {
+//                                    dialog.dismiss();
+//                                    updateChannel(item);
+//                                }
+//                            }).create();
+//        }
+//        }
+//        return null;
+//    }
 
     void updateChannel(int item) {
         if (channel == item)

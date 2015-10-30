@@ -173,18 +173,31 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int heart=0x7f020001;
         public static final int heartsmall=0x7f020002;
         public static final int ic_launcher=0x7f020003;
+        public static final int startbutton=0x7f020004;
     }
     public static final class id {
-        public static final int enclosing_frame=0x7f080000;
-        public static final int graphviewfinal2=0x7f080004;
-        public static final int heart_rate_button=0x7f080005;
-        public static final int preview=0x7f080001;
-        public static final int recorder_button=0x7f080006;
-        public static final int txt_heart_rate=0x7f080002;
-        public static final int viewfinder_view=0x7f080003;
+        public static final int continue_btn=0x7f080006;
+        public static final int enclosing_frame=0x7f080007;
+        public static final int first=0x7f080002;
+        public static final int fourth=0x7f080005;
+        public static final int graphviewfinal2=0x7f08000c;
+        public static final int heart_rate_button=0x7f08000d;
+        public static final int hr=0x7f080000;
+        public static final int instructions_text=0x7f080001;
+        public static final int preview=0x7f080009;
+        public static final int recorder_button=0x7f08000e;
+        public static final int second=0x7f080003;
+        public static final int start_btn=0x7f08000f;
+        public static final int third=0x7f080004;
+        public static final int txt_heart_rate=0x7f08000a;
+        public static final int view=0x7f080008;
+        public static final int viewfinder_view=0x7f08000b;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
+        public static final int activity_analyze=0x7f030000;
+        public static final int activity_instruction=0x7f030001;
+        public static final int activity_login=0x7f030002;
+        public static final int activity_main=0x7f030003;
     }
     public static final class string {
         public static final int app_name=0x7f070000;

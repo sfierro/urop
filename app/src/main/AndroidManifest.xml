@@ -35,8 +35,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="PPG Analyzer"
             android:icon="@drawable/heartsmall" >
-
         </activity>
+        <activity android:name=".AnalyzeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="PPG Analyzer"
+            android:icon="@drawable/heartsmall" ></activity>
     </application>
 
 </manifest>

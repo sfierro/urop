@@ -53,8 +53,8 @@ public class GraphViewFinal extends View {
     float range = maximumPlottableValue;
 
     private boolean redPlotOn = true;
-    private boolean greenPlotOn = false;
-    private boolean bluePlotOn = false;
+//    private boolean greenPlotOn = false;
+//    private boolean bluePlotOn = false;
     private Boolean autoscale = true;
 
     private double incrementX, slowFactor;
@@ -194,6 +194,7 @@ public class GraphViewFinal extends View {
 //              maxY = Math.max(maxY, Collections.max(blueValues));
 //          }
 //        }
+
         if (relevantFftOutput != null) {
             ArrayList<Double> fo = new ArrayList<Double>();
             for (double d : relevantFftOutput) {
@@ -249,7 +250,7 @@ public class GraphViewFinal extends View {
         if (autoscale) {
             scale();
         }
-
+        
         // If relevantFftOutput is not null then we should plot the fft output
         // instead of the raw RGB values.
         if (relevantFftOutput != null) {

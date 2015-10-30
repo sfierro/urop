@@ -6,10 +6,19 @@
     android:id="@+id/enclosing_frame"
     tools:context=".MainActivity" >
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/White"
+        android:id="@+id/view">
+
+    </View>
+
     <SurfaceView android:layout_width="fill_parent" 
 		android:id="@+id/preview" 
 		android:layout_height="fill_parent"
-		android:layout_centerInParent="true" />
+		android:layout_centerInParent="true"
+     />
 
     <TextView
         android:id="@+id/txt_heart_rate"
@@ -26,14 +35,16 @@
       android:id="@+id/viewfinder_view"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:background="@color/transparent" />
+      android:background="@color/transparent"
+    />
       
     <edu.mit.dlab.ppganalyzer.GraphViewFinal
       android:id="@+id/graphviewfinal2"
       android:layout_width="fill_parent"
       android:layout_height="80dp"
       android:layout_alignParentBottom="true"
-      android:background="@color/transparent" />
+      android:background="@color/White"
+        android:layout_marginRight="15dp"/>
 
     <Button
         android:id="@+id/heart_rate_button"
@@ -55,6 +66,16 @@
     	android:textOff="Record"
         android:selectable="true"
         android:text="record" />
+
+    <Button
+        android:id="@+id/start_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="START"
+        android:padding="15dp"
+        android:background="@drawable/startbutton"/>
 
 </RelativeLayout>
 <!-- From: file:/Users/samfierro/Documents/PPGAnalyzer/app/src/main/res/layout/activity_main.xml -->

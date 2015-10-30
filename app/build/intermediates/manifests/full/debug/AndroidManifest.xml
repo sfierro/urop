@@ -22,7 +22,7 @@
         android:label="PPG Analyzer"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.mit.dlab.ppganalyzer.MainActivity"
+            android:name="edu.mit.dlab.ppganalyzer.InstructionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/heartsmall"
             android:label="PPG Analyzer" >
@@ -32,6 +32,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="edu.mit.dlab.ppganalyzer.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:icon="@drawable/heartsmall"
+            android:label="PPG Analyzer" >
+        </activity>
+        <activity android:name="edu.mit.dlab.ppganalyzer.AnalyzeActivity" />
     </application>
 
 </manifest>
