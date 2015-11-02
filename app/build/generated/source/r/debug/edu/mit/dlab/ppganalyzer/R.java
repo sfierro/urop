@@ -189,6 +189,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int second=0x7f080003;
         public static final int start_btn=0x7f08000f;
         public static final int third=0x7f080004;
+        public static final int title=0x7f080010;
         public static final int txt_heart_rate=0x7f08000a;
         public static final int view=0x7f080008;
         public static final int viewfinder_view=0x7f08000b;

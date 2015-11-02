@@ -8,7 +8,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-
 /**
  * Creates a recorder to start thread
  */

@@ -7,13 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 
 import android.view.View;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,25 +34,19 @@ public class GraphViewFinal extends View {
     private String[] verlabels;
 
     private List<Integer> redValues = new ArrayList<Integer>();
-//    private List<Integer> greenValues = new ArrayList<Integer>();
-//    private List<Integer> blueValues = new ArrayList<Integer>();
 
     private float width = 10.0f;
     private float graphheight;
     private float border;
     int bufferSize;
     float minY = 0;
-    float maxY;
-    float startX;
-    private int channel;
-    private int lastX;
+    float maxY, startX;
+    private int channel, lastX;
 
     public static final int maximumPlottableValue = (int)Math.pow(2, 16);
     float range = maximumPlottableValue;
 
     private boolean redPlotOn = true;
-//    private boolean greenPlotOn = false;
-//    private boolean bluePlotOn = false;
     private Boolean autoscale = true;
 
     private double incrementX, slowFactor;
@@ -91,10 +83,6 @@ public class GraphViewFinal extends View {
         border = 20;
     }
 
-    // The two plot methods are the same, except that one works with an array
-    // and the other with an ArrayList
-    // TODO: consolidate the plot methods since the logic/drawing is the exact
-    // same
     /**
      * Plot the values onto the current canvas using the desired color. This
      * method will be called from the onDraw method.
@@ -110,36 +98,6 @@ public class GraphViewFinal extends View {
 
         for (int i = 0; i < size; i++, j += k * incrementX) {
             float tempY = (values.get(i) - minY) * graphheight / range;
-            y = graphheight - tempY + 10;
-
-            this.canvas.drawPoint(j, y, paint);
-            if (i != 0) {
-                this.canvas.drawLine((float)(j - Math.floor(k) * incrementX), prevY, j, y, paint);
-            }
-
-            prevY = y;
-            if (k >= 1) {
-                k = 0;
-            }
-            k += 1.0 / slowFactor;
-        }
-    }
-
-    /**
-     * Plot the values onto the current canvas using the desired color. This
-     * method will be called from the onDraw method.
-     * @param values to plot
-     * @param color to use
-     */
-    private void plot(double[] values, int color) {
-        paint.setColor(color);
-        float y, prevY = 0;
-        int size = values.length;
-        float k = 0;
-        float j = startX;
-
-        for (int i = 0; i < size; i++, j += k * incrementX) {
-            float tempY = (float)((values[i] - minY) * graphheight / range);
             y = graphheight - tempY + 10;
 
             this.canvas.drawPoint(j, y, paint);
@@ -174,34 +132,12 @@ public class GraphViewFinal extends View {
         minY = Integer.MAX_VALUE;
         maxY = 0;
 
-        // Only red is synchronized here because I stopped working with the
-        // other colors. Ideally each list would be locked when appropriate.
+        // Only red is synchronized here because I stopped working with the other colors
         synchronized (redValues) {
             if (redPlotOn && redValues.size() > 0) {
                 minY = Math.min(minY, Collections.min(redValues));
                 maxY = Math.max(maxY, Collections.max(redValues));
             }
-        }
-//        synchronized (greenValues) {
-//          if (greenPlotOn && greenValues.size() > 0) {
-//              minY = Math.min(minY, Collections.min(greenValues));
-//              maxY = Math.max(maxY, Collections.max(greenValues));
-//          }
-//        }
-//        synchronized (blueValues) {
-//          if (bluePlotOn && blueValues.size() > 0) {
-//              minY = Math.min(minY, Collections.min(blueValues));
-//              maxY = Math.max(maxY, Collections.max(blueValues));
-//          }
-//        }
-
-        if (relevantFftOutput != null) {
-            ArrayList<Double> fo = new ArrayList<Double>();
-            for (double d : relevantFftOutput) {
-                fo.add(d);
-            }
-            minY = (float)Math.min(minY, Collections.min(fo));
-            maxY = (float)Math.max(maxY, Collections.max(fo));
         }
 
         if (maxY - minY < 2) {
@@ -241,40 +177,16 @@ public class GraphViewFinal extends View {
         int i;
         float horstart = border * 2;
         graphheight = getHeight() - 2 * border;
-        
-        if (!MainActivity.plotRaw) {
-            relevantFftOutput = null;
-            return;
-        }
 
         if (autoscale) {
             scale();
         }
-        
-        // If relevantFftOutput is not null then we should plot the fft output
-        // instead of the raw RGB values.
-        if (relevantFftOutput != null) {
-            incrementX = 1.0 * getWidth() / relevantFftOutput.length;
-            plot(relevantFftOutput, Color.WHITE);
-        } else {
-            incrementX = 1.0 * getWidth() / bufferSize;
-            if (redPlotOn) {
-                synchronized (redValues) {
-                    plot(redValues, Color.RED);
-                }
-            }
 
-//            if (greenPlotOn) {
-//              synchronized (greenValues) {
-//                  plot(greenValues, Color.GREEN);
-//              }
-//            }
-//
-//            if (bluePlotOn) {
-//              synchronized (blueValues) {
-//                  plot(blueValues, Color.BLUE);
-//              }
-//            }
+        incrementX = 1.0 * getWidth() / bufferSize;
+        if (redPlotOn) {
+            synchronized (redValues) {
+                plot(redValues, Color.RED);
+            }
         }
 
         lastX = lastX + (int)width;
@@ -324,16 +236,6 @@ public class GraphViewFinal extends View {
                 redValues.remove(0);
             }
         }
-//        synchronized (greenValues) {
-//          while (greenValues.size() > bufferSize) {
-//              greenValues.remove(0);
-//          }
-//        }
-//        synchronized (blueValues) {
-//          while (blueValues.size() > bufferSize) {
-//              blueValues.remove(0);
-//          }
-//        }
     }
 
     /*
@@ -356,34 +258,8 @@ public class GraphViewFinal extends View {
                     addPoint(points[0], redValues);
                 }
             }
-//            if (greenPlotOn || channel == ImageHandler.CHANNEL_GREEN) {
-//              synchronized (greenValues) {
-//                  addPoint(points[1], greenValues);
-//              }
-//            }
-//            if (bluePlotOn || channel == ImageHandler.CHANNEL_BLUE) {
-//              synchronized (blueValues) {
-//                  addPoint(points[2], blueValues);
-//              }
-//            }
         }
     };
-
-//    /**
-//     * Add new RGB values to the data.
-//     * @param red
-//     * @param green
-//     * @param blue
-//     */
-//    void updateGraph(int red, int green, int blue) {
-//        Message m = Message.obtain();
-//        m.obj = new Integer[] {
-//                red, green, blue
-//        };
-//        m.arg1 = 0;
-//        // Send the RGB values to the Handler to process.
-//        h.sendMessageDelayed(m, 1);
-//    }
 
     void updateGraph(int red) {
         Message m = Message.obtain();
@@ -414,39 +290,6 @@ public class GraphViewFinal extends View {
         continuousHRCalculation = false;
     }
 
-    private void loopHeartRateCalculation(final TextView outputView) {
-        new AsyncTask<Void, Double, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... arg0) {
-                MainActivity.plotRaw = false;
-                while (continuousHRCalculation) {
-                    // Tell the UI thread to publish the calculated heart rate
-                    publishProgress(getHeartRate(true));
-                }
-                return null;
-            }
-
-            @Override
-            protected void onProgressUpdate(Double... values) {
-                // Called in the UI thread
-                outputView.setText("heartRate: " + values[0]);
-            }
-
-            @Override
-            protected void onPostExecute(Void voids) {
-                outputView.setText("");
-                MainActivity.plotRaw = true;
-                relevantFftOutput=null;
-            }
-
-        }.execute();
-    }
-
-    // Meant to keep only the relevant parts of the FFT output: the indices
-    // between the minimum and maximum supported heart rates.
-    double[] relevantFftOutput = null;
-
     double getHeartRate(boolean plotIt) {
         int[] rawValues = new int[0];
         switch(channel){
@@ -460,26 +303,7 @@ public class GraphViewFinal extends View {
                 }
             }
             break;
-//        case ImageHandler.CHANNEL_GREEN:
-//          synchronized (greenValues) {
-//              // Provide the fft algorithm with input that has a size that is a power of 2.
-//              int size = (int)Math.pow(2, (int)Math.floor(Math.log(greenValues.size()) / Math.log(2)));
-//              rawValues = new int[size];
-//              for (int i = 0; i < size; i++) {
-//                  rawValues[i] = greenValues.get(i);
-//              }
-//          }
-//          break;
-//        case ImageHandler.CHANNEL_BLUE:
-//          synchronized (blueValues) {
-//              // Provide the fft algorithm with input that has a size that is a power of 2.
-//              int size = (int)Math.pow(2, (int)Math.floor(Math.log(blueValues.size()) / Math.log(2)));
-//              rawValues = new int[size];
-//              for (int i = 0; i < size; i++) {
-//                  rawValues[i] = blueValues.get(i);
-//              }
-//          }
-//          break;
+
         }
         // Filter the raw data
         int[] filteredInput = firFilter(rawValues);
@@ -497,7 +321,6 @@ public class GraphViewFinal extends View {
         // minimum supported HR = 30 -> min = 1/2*output.length/sampling_freq
         int minHrIndex = (int)(fftOutput.length / ImageHandler.SAMPLING_FREQUENCY / 2);
         int maxHrIndex = (int)(4 * fftOutput.length / ImageHandler.SAMPLING_FREQUENCY);
-        relevantFftOutput = new double[maxHrIndex - minHrIndex + 1];
 
         double max = Integer.MIN_VALUE;
         int index = -1;
@@ -507,9 +330,7 @@ public class GraphViewFinal extends View {
                 max = fftOutput[i];
                 index = i;
             }
-            relevantFftOutput[i - minHrIndex] = fftOutput[i];
         }
-        if (!plotIt){relevantFftOutput=null;}
 
         double heartRate = index * ImageHandler.SAMPLING_FREQUENCY / fftOutput.length * 60;
         return heartRate;

@@ -25,7 +25,8 @@
             android:name="edu.mit.dlab.ppganalyzer.InstructionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/heartsmall"
-            android:label="PPG Analyzer" >
+            android:label="PPG Analyzer"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,9 +37,15 @@
             android:name="edu.mit.dlab.ppganalyzer.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/heartsmall"
-            android:label="PPG Analyzer" >
+            android:label="PPG Analyzer"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="edu.mit.dlab.ppganalyzer.AnalyzeActivity" />
+        <activity
+            android:name="edu.mit.dlab.ppganalyzer.AnalyzeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:icon="@drawable/heartsmall"
+            android:label="PPG Analyzer"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

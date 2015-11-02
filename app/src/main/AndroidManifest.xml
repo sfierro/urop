@@ -19,11 +19,15 @@
         android:allowBackup="true"
         android:icon="@drawable/heart"
         android:label="PPG Analyzer"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+
+        >
         <activity android:name=".InstructionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="PPG Analyzer"
-            android:icon="@drawable/heartsmall" >
+            android:icon="@drawable/heartsmall"
+            android:screenOrientation="portrait"
+            >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -34,12 +38,14 @@
             android:name="edu.mit.dlab.ppganalyzer.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="PPG Analyzer"
-            android:icon="@drawable/heartsmall" >
+            android:icon="@drawable/heartsmall"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".AnalyzeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="PPG Analyzer"
-            android:icon="@drawable/heartsmall" ></activity>
+            android:icon="@drawable/heartsmall"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

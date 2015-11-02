@@ -1,7 +1,5 @@
 package edu.mit.dlab.ppganalyzer;
 
-import android.annotation.SuppressLint;
-
 import android.app.Activity;
 
 import android.app.AlertDialog;
@@ -26,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -43,7 +42,6 @@ public class MainActivity extends Activity {
     private ViewfinderView viewfinder;
     private GraphViewFinal graphviewfinal;
     private ImageHandler processor;
-    private static final int SETTINGS = 1;
     private SharedPreferences prefs;
     private int channel;
     private View myView;
@@ -51,6 +49,8 @@ public class MainActivity extends Activity {
     private ProgressDialog _progressDialog;
     private int _progress = 0;
     private Handler _progressHandler;
+
+    public static Boolean plotRaw = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +75,8 @@ public class MainActivity extends Activity {
 
         myView = (View) findViewById(R.id.view);
         myView.bringToFront();
+        TextView title = (TextView) findViewById(R.id.title);
+        title.bringToFront();
         graphviewfinal.bringToFront();
         Button startButton = (Button) findViewById(R.id.start_btn);
         startButton.bringToFront();
@@ -96,15 +98,8 @@ public class MainActivity extends Activity {
                 super.handleMessage(msg);
                 if(_progress>=26) {
                     Intent in = new Intent(MainActivity.this,AnalyzeActivity.class);
-                    in.putExtra("hr",graphviewfinal.getHeartRate(false));
+                    in.putExtra("hr", graphviewfinal.getHeartRate(false));
                     startActivity(in);
-//                    Toast.makeText(
-//                            MainActivity.this,
-//                            ""
-//                                    + graphviewfinal.getHeartRate(false),
-//                            Toast.LENGTH_SHORT).show();
-
-
                 } else {
 
                     if (graphviewfinal.getHeartRate(false) > 40) {
@@ -257,222 +252,14 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
 
-//  void showPreferences() {
-////        Intent it = new Intent(this, Preferences.class);
-//
-//      // load it up
-//      Camera cam = mPreview.getCamera();
-//
-//      if (cam == null) {
-//          Toast.makeText(this, getString(R.string.message_camera_not_found),
-//                  Toast.LENGTH_LONG).show();
-//      }
-//      if (cam != null) {
-//          List<String> opts;
-//          String[] output = new String[1];
-//
-//          // white balance
-//          it.putExtra("current_" + getString(R.string.pref_white_balance),
-//                  cam.getParameters().getWhiteBalance());
-//          opts = cam.getParameters().getSupportedWhiteBalance();
-//          if (opts != null && opts.size() > 1) {
-//              it.putExtra(getString(R.string.pref_white_balance),
-//                      opts.toArray(output));
-//          }
-//
-//          // color effects
-//          it.putExtra("current_" + getString(R.string.pref_color_effects),
-//                  cam.getParameters().getColorEffect());
-//          opts = cam.getParameters().getSupportedColorEffects();
-//          if (opts != null && opts.size() > 1) {
-//              it.putExtra(getString(R.string.pref_color_effects),
-//                      opts.toArray(output));
-//          }
-//
-//          // flash modes
-//          it.putExtra("current_" + getString(R.string.pref_flash_modes), cam
-//                  .getParameters().getFlashMode());
-//          opts = cam.getParameters().getSupportedFlashModes();
-//          if (opts != null && opts.size() > 1) {
-//              it.putExtra(getString(R.string.pref_flash_modes),
-//                      opts.toArray(output));
-//          }
-//
-//          // focus modes
-//          it.putExtra("current_" + getString(R.string.pref_focus_modes), cam
-//                  .getParameters().getFocusMode());
-//          opts = cam.getParameters().getSupportedFocusModes();
-//          if (opts != null && opts.size() > 1) {
-//              it.putExtra(getString(R.string.pref_focus_modes),
-//                      opts.toArray(output));
-//          }
-//
-//          // scene modes
-//          it.putExtra("current_" + getString(R.string.pref_scene_modes), cam
-//                  .getParameters().getSceneMode());
-//          opts = cam.getParameters().getSupportedSceneModes();
-//          if (opts != null && opts.size() > 1) {
-//              it.putExtra(getString(R.string.pref_scene_modes),
-//                      opts.toArray(output));
-//          }
-//
-//          // anti banding
-//          it.putExtra("current_" + getString(R.string.pref_anti_banding), cam
-//                  .getParameters().getAntibanding());
-//          opts = cam.getParameters().getSupportedAntibanding();
-//          if (opts != null && opts.size() > 1) {
-//              it.putExtra(getString(R.string.pref_anti_banding),
-//                      opts.toArray(output));
-//          }
-//      }
-//      // run it
-//      startActivityForResult(it, SETTINGS);
-//  }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-            case SETTINGS: {
-                Message msg = Message.obtain();
-                msg.what = SETTINGS;
-                msg.obj = data;
-                msgHandler.sendMessageDelayed(msg, 1500);
-            }
-                break;
-            }
-        }
-    }
-
-//  @Override
-//  public boolean onCreateOptionsMenu(Menu menu) {
-//      super.onCreateOptionsMenu(menu);
-//      this.menu = menu;
-//      MenuInflater inflater = getMenuInflater();
-//      inflater.inflate(R.menu.mainoptions, menu);
-//      return true;
-//  }
-
-    public static boolean plotRaw = true;
-//  public static boolean plotFilteredSignal = false;
-//  public boolean continousHRMode = false;
-//  public boolean rawMode = true;
-
-//  public void updateMenu() {
-//      menu.findItem(R.id.menu_plot_toggle_continuous_heartrate).setChecked(
-//              continousHRMode);
-//      menu.findItem(R.id.menu_plot_toggle_raw).setChecked(rawMode);
-//  }
-
-//  public void setBackground(int color){
-//      RelativeLayout background= (RelativeLayout) findViewById(R.id.enclosing_frame);
-//      if (color!=0){
-//          background.setBackgroundColor(color);
-//          this.mPreview.surface.setAlpha(0);
-//          this.viewfinder.setAlpha(0);
-//      }else{
-//          this.mPreview.surface.setAlpha(1);
-//          this.viewfinder.setAlpha(1);
-//      }
-//  }
-    
-//  @Override
-//  public boolean onOptionsItemSelected(MenuItem item) {
-//      switch (item.getItemId()) {
-//      case R.id.menu_toggle_color_green:
-//          setBackground(Color.GREEN);
-//          break;
-//      case R.id.menu_toggle_color_red:
-//          setBackground(Color.RED);
-//          break;
-//      case R.id.menu_toggle_color_camera:
-//          setBackground(0);
-//          break;
-//      case R.id.menu_viewfinder:
-//          break;
-//      case R.id.menu_camera:
-////            showPreferences();
-//          break;
-//      case R.id.menu_plot:
-//          break;
-//      case R.id.menu_info:
-//          break;
-//      case R.id.menu_viewfinder_75:
-//          viewfinder.setScale(.75);
-//          processor.setRadiusScale(.75);
-//          return true;
-//      case R.id.menu_viewfinder_50:
-//          viewfinder.setScale(.50);
-//          processor.setRadiusScale(.50);
-//          return true;
-//      case R.id.menu_viewfinder_25:
-//          viewfinder.setScale(.25);
-//          processor.setRadiusScale(.25);
-//          return true;
-//      case R.id.menu_plot_toggle_red:
-//          item.setChecked(graphviewfinal.toggleRed());
-//          return true;
-//      case R.id.menu_plot_toggle_blue:
-//          item.setChecked(graphviewfinal.toggleBlue());
-//          return true;
-//      case R.id.menu_plot_toggle_green:
-//          item.setChecked(graphviewfinal.toggleGreen());
-//          return true;
-//      case R.id.menu_calculate_heartrate:
-//          Toast.makeText(
-//                  this,
-//                  "calculated heartRate: "
-//                          + graphviewfinal.getHeartRate(false),
-//                  Toast.LENGTH_SHORT).show();
-//          return true;
-//
-//      case R.id.menu_plot_toggle_continuous_heartrate:
-//          graphviewfinal
-//                  .toggleContinuousHeartRateCalculation((TextView) findViewById(R.id.txt_heart_rate));
-//          continousHRMode = !continousHRMode;
-//          if (continousHRMode) {
-//              rawMode = false;
-//          } else {
-//              rawMode = !rawMode;
-//          }
-//          updateMenu();
-//          return true;
-//
-//      case R.id.menu_plot_toggle_raw:
-//          plotRaw = !plotRaw;
-//          if (!continousHRMode) {
-//              rawMode = !rawMode;
-//          }
-//          updateMenu();
-//          return true;
-//
-//      case R.id.menu_plot_toggle_filtered_signal:
-//          plotFilteredSignal = !plotFilteredSignal;
-//          item.setChecked(plotFilteredSignal);
-//          return true;
-//      case R.id.menu_analyzer:
-//          selectChannel();
-//          return true;
-//      case R.id.menu_plot_toggle_derivative:
-////                graphviewfinal.useDerivative();
-////                item.setChecked(true);
-//              item.setChecked(false);
-//          return true;
-//      }
-//
-//      return super.onOptionsItemSelected(item);
-//  }
-
     class Preview implements SurfaceHolder.Callback {
         SurfaceHolder mHolder;
         Camera mCamera;
         private Activity activity;
-//        private SurfaceView surface;
         private int cameraId;
 
         Preview(Activity activity, SurfaceView surface) {
             this.activity = activity;
-//            this.surface = surface;
 
             // Install a SurfaceHolder.Callback so we get notified when the
             // underlying surface is created and destroyed.
@@ -623,15 +410,6 @@ public class MainActivity extends Activity {
         camera.setDisplayOrientation(result);
     }
 
-    @SuppressLint("HandlerLeak")
-    private Handler msgHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-            }
-        }
-    };
-
     class snapshot {
         byte[] data;
         int height;
@@ -675,75 +453,4 @@ public class MainActivity extends Activity {
         }
     }
 
-//  void setParameters(Camera.Parameters params) {
-//      SharedPreferences prefs = PreferenceManager
-//              .getDefaultSharedPreferences(getBaseContext());
-//
-//      if (prefs.contains(getString(R.string.pref_scene_modes))) {
-//          // set the scene mode
-//          params.setSceneMode(prefs.getString(
-//                  getString(R.string.pref_scene_modes), ""));
-//      }
-//
-//      if (prefs.contains(getString(R.string.pref_flash_modes))) {
-//          // set the scene mode
-//          params.setFlashMode(prefs.getString(
-//                  getString(R.string.pref_flash_modes), ""));
-//      }
-//
-//      if (prefs.contains(getString(R.string.pref_focus_modes))) {
-//          // set the scene mode
-//          params.setFocusMode(prefs.getString(
-//                  getString(R.string.pref_focus_modes), ""));
-//      }
-//
-//      if (prefs.contains(getString(R.string.pref_white_balance))) {
-//          // set the scene mode
-//          params.setWhiteBalance(prefs.getString(
-//                  getString(R.string.pref_white_balance), ""));
-//      }
-//
-//      if (prefs.contains(getString(R.string.pref_anti_banding))) {
-//          // set the scene mode
-//          params.setAntibanding(prefs.getString(
-//                  getString(R.string.pref_anti_banding), ""));
-//      }
-//
-//      if (prefs.contains(getString(R.string.pref_color_effects))) {
-//          // set the scene mode
-//          params.setColorEffect(prefs.getString(
-//                  getString(R.string.pref_color_effects), ""));
-//      }
-//  }
-
-//    private static final int DIALOG_SELECT_CHANNEL = 1;
-//
-//    protected Dialog onCreateDialog(int id) {
-//        switch (id) {
-//        case DIALOG_SELECT_CHANNEL: {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            return builder
-//                    .setTitle(getString(R.string.title_select_channel))
-//                    .setCancelable(true)
-//                    .setSingleChoiceItems(
-//                            getResources().getStringArray(
-//                                    R.array.channel_options), channel,
-//                            new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog,
-//                                        int item) {
-//                                    dialog.dismiss();
-//                                    updateChannel(item);
-//                                }
-//                            }).create();
-//        }
-//        }
-//        return null;
-//    }
-
-    void updateChannel(int item) {
-        if (channel == item)
-            return;
-        channel = item;
-        graphviewfinal.setChannel(channel);
-    }
 }
