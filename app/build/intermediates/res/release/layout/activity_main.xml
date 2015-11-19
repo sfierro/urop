@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    android:id="@+id/enclosing_frame"
+    tools:context=".MainActivity" >
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/White"
+        android:id="@+id/view">
+
+    </View>
+
+    <SurfaceView android:layout_width="fill_parent" 
+		android:id="@+id/preview" 
+		android:layout_height="fill_parent"
+		android:layout_centerInParent="true"
+     />
+
+    <TextView
+        android:id="@+id/txt_heart_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd= "true"
+        android:background="@color/Black"
+        android:textColor="@color/White"
+        android:textSize="16sp" />
+    
+	<edu.mit.dlab.ppganalyzer.ViewfinderView
+      android:id="@+id/viewfinder_view"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:background="@color/transparent"
+    />
+      
+    <edu.mit.dlab.ppganalyzer.GraphViewFinal
+      android:id="@+id/graphviewfinal2"
+      android:layout_width="fill_parent"
+      android:layout_height="80dp"
+      android:layout_alignParentBottom="true"
+      android:background="@color/White"
+        android:layout_marginRight="15dp"/>
+
+    <Button
+        android:id="@+id/heart_rate_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/graphviewfinal2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="HR" />
+    
+    <ToggleButton
+        android:id="@+id/recorder_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/graphviewfinal2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textOn="Recording"
+    	android:textOff="Record"
+        android:selectable="true"
+        android:text="record" />
+
+    <Button
+        android:id="@+id/start_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Start"
+        android:textSize="25sp"
+        android:padding="35dp"
+        android:background="@drawable/startbutton"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PPG Analyzer"
+        android:id="@+id/title"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="40dp"
+        android:textStyle="bold"/>
+
+</RelativeLayout>
+<!-- From: file:/Users/samfierro/Documents/PPGAnalyzer/app/src/main/res/layout/activity_main.xml -->

@@ -31,9 +31,9 @@ public class GraphViewFinal extends View {
 
     private Canvas canvas;
     private Paint paint;
-    private String[] verlabels;
+    public static String[] verlabels;
 
-    private List<Integer> redValues = new ArrayList<Integer>();
+    public List<Integer> redValues = new ArrayList<Integer>();
 
     private float width = 10.0f;
     private float graphheight;

@@ -23,7 +23,10 @@ public class InstructionActivity extends Activity {
             new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Bundle extras = getIntent().getExtras();
                     Intent in = new Intent(InstructionActivity.this,MainActivity.class);
+                    in.putExtra("name",extras.getString("name"));
+                    in.putExtra("id",extras.getString("id"));
                     startActivity(in);
                 }
             }

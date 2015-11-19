@@ -18,14 +18,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/heart"
+        android:icon="@drawable/heartsmall"
         android:label="PPG Analyzer"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.mit.dlab.ppganalyzer.InstructionActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:name="edu.mit.dlab.ppganalyzer.InitialActivity"
             android:icon="@drawable/heartsmall"
             android:label="PPG Analyzer"
+            android:noHistory="true"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,17 +34,32 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="edu.mit.dlab.ppganalyzer.InstructionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:icon="@drawable/heartsmall"
+            android:label="PPG Analyzer"
+            android:noHistory="true"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="edu.mit.dlab.ppganalyzer.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/heartsmall"
             android:label="PPG Analyzer"
+            android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="edu.mit.dlab.ppganalyzer.AnalyzeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/heartsmall"
-            android:label="PPG Analyzer"
+            android:label="Results"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.mit.dlab.ppganalyzer.HistoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:icon="@drawable/heartsmall"
+            android:label="History"
             android:screenOrientation="portrait" />
     </application>
 

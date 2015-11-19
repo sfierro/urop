@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hr"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"/>
+
+    <!--<edu.mit.dlab.ppganalyzer.GraphViewFinal-->
+        <!--android:id="@+id/graphviewfinal2"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@color/White"-->
+        <!--android:layout_marginRight="15dp"/>-->
+
+</LinearLayout><!-- From: file:/Users/samfierro/Documents/PPGAnalyzer/app/src/main/res/layout/activity_analyze.xml -->

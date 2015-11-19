@@ -28,6 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.mit.dlab.ppganalyzer.util.GetCameraInfo;
 
 
@@ -52,10 +55,16 @@ public class MainActivity extends Activity {
 
     public static Boolean plotRaw = true;
 
+    public static List<Integer> vals = new ArrayList<Integer>();
+
+    public static List<Integer> getRedValues() {
+        return vals;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         previewSize = null;
         viewfinder = null;
 
@@ -97,8 +106,12 @@ public class MainActivity extends Activity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if(_progress>=26) {
+                    Bundle extras = getIntent().getExtras();
                     Intent in = new Intent(MainActivity.this,AnalyzeActivity.class);
+                    in.putExtra("name",extras.getString("name"));
+                    in.putExtra("id",extras.getString("id"));
                     in.putExtra("hr", graphviewfinal.getHeartRate(false));
+                    vals = graphviewfinal.redValues;
                     startActivity(in);
                 } else {
 
@@ -107,6 +120,7 @@ public class MainActivity extends Activity {
                         _progressDialog.incrementProgressBy(4);
                     }
                     _progressHandler.sendEmptyMessageDelayed(0, 1000);
+//                    _progressHandler.sendEmptyMessageDelayed(0, 100);
                 }
             }
         };
@@ -179,7 +193,7 @@ public class MainActivity extends Activity {
 
         _progressDialog.setIcon(R.drawable.heartsmall);
 
-        _progressDialog.setTitle("Taking measurements, please wait");
+        _progressDialog.setTitle("Recording, please wait");
         _progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         _progressDialog.setProgressNumberFormat(null);
         _progressDialog.setProgressPercentFormat(null);
@@ -189,11 +203,11 @@ public class MainActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 _progressHandler.removeMessages(0);
                 _progressDialog.dismiss();
-                Toast.makeText(
-                        MainActivity.this,
-                        ""
-                                + graphviewfinal.getHeartRate(false),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(
+//                        MainActivity.this,
+//                        ""
+//                                + graphviewfinal.getHeartRate(false),
+//                        Toast.LENGTH_SHORT).show();
             }
         });
         return _progressDialog;
