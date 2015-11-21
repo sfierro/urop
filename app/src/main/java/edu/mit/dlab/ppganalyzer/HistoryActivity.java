@@ -1,8 +1,18 @@
 package edu.mit.dlab.ppganalyzer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,36 +29,60 @@ import java.util.List;
  */
 public class HistoryActivity extends Activity {
 
-    String myString;
-    List<String> myList;
+
+    HashMap<ImageButton,String> folderMap;
+    ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_analyze);
+        setContentView(R.layout.activity_history);
+
+        folderMap = new HashMap<ImageButton,String>();
 
         final Bundle extras = getIntent().getExtras();
-//
-//        for (int i = 0; i < getApplicationContext().getFilesDir().length(); i++) {
-//
-//            List<MediaStore.Files> files = new ArrayList<MediaStore.Files>(getApplicationContext().getFilesDir());
-//
-//        }
-        FileInputStream fis = null;
-        try {
-            fis = getApplicationContext().openFileInput(extras.getString("id") + "-waveforms");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        BufferedReader r = new BufferedReader(new InputStreamReader(fis));
-        try {
-            String line;
-            while ((line = r.readLine()) != null) {
-                myString += line;
+        TableLayout tr = (TableLayout) findViewById(R.id.table);
+
+        File dir = getApplicationContext().getFilesDir();
+        File[] directoryListing = dir.listFiles();
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                if (child.getName().matches(extras.getString("id")+"[^0-9].*")) {
+
+                    ImageButton btn = new ImageButton(this);
+                    btn.setBackgroundResource(R.drawable.file);
+
+                    TableRow t = new TableRow(this);
+                    TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                    t.setLayoutParams(lp);
+                    t.setGravity(Gravity.CENTER_VERTICAL);
+                    t.setPadding(50, 50, 50, 50);
+                    t.addView(btn);
+
+                    TextView textView = new TextView(this);
+                    textView.setText(child.getName());
+                    textView.setPadding(10, 10, 10, 10);
+                    t.addView(textView);
+
+                    tr.addView(t);
+
+                    folderMap.put(btn,child.getName());
+
+                }
             }
-            r.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        for (ImageButton ib : folderMap.keySet()) {
+            imageButton = ib;
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent in = new Intent(HistoryActivity.this,FileView.class);
+                    in.putExtra("file_name",folderMap.get(imageButton));
+                    startActivity(in);
+                }
+            });
+        }
+
     }
 }

@@ -21,8 +21,6 @@ import java.io.InputStreamReader;
 public class AnalyzeActivity extends Activity {
 
     private TextView hr;
-    TextView test;
-    String myString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,41 +30,16 @@ public class AnalyzeActivity extends Activity {
         final Bundle extras = getIntent().getExtras();
         int num = (int) extras.getDouble("hr");
         hr = (TextView) findViewById(R.id.hr);
-//        hr.setText("" + num);
+        hr.setText("" + num);
 
-        FileInputStream fis = null;
-        try {
-//            extras.getString("id")+"-waveforms"
-            fis = getApplicationContext().openFileInput("test");
-            // have date from end of file name be passed through extra intent bundle
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        BufferedReader r = new BufferedReader(new InputStreamReader(fis));
-        try {
-            String line;
-            while ((line = r.readLine()) != null) {
-                myString += line;
-            }
-            r.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        test = (TextView) findViewById(R.id.test);
-        test.setText(myString);
-
-        Button exit = (Button)findViewById(R.id.quit_btn);
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AnalyzeActivity.this.finish();
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
+//        Button exit = (Button)findViewById(R.id.quit_btn);
+//        exit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//                System.exit(0);
+//            }
+//        });
 
         Button retest = (Button)findViewById(R.id.retest_btn);
         retest.setOnClickListener(new View.OnClickListener() {
@@ -82,8 +55,9 @@ public class AnalyzeActivity extends Activity {
         startover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(AnalyzeActivity.this,InitialActivity.class);
-                startActivity(in);
+                Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
             }
         });
 

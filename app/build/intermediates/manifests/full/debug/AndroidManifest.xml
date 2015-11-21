@@ -27,7 +27,6 @@
             android:name="edu.mit.dlab.ppganalyzer.InitialActivity"
             android:icon="@drawable/heartsmall"
             android:label="PPG Analyzer"
-            android:noHistory="true"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +39,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/heartsmall"
             android:label="PPG Analyzer"
-            android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -48,8 +46,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/heartsmall"
             android:label="PPG Analyzer"
-            android:launchMode="singleTask"
-            android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -63,6 +59,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/heartsmall"
             android:label="History"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="edu.mit.dlab.ppganalyzer.FileView"
+            android:icon="@drawable/heartsmall"
+            android:label="Data"
             android:screenOrientation="portrait" />
     </application>
 
