@@ -1,5 +1,6 @@
 package edu.mit.dlab.ppganalyzer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,10 +25,10 @@ public class Recorder {
         Recorder.ctx=ctx;
     }
     static public void startRecording(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss", Locale.US);
-        Date date = new Date();
-        String message=Recorder.toRecord+" "+dateFormat.format(date)+"\n\r";
-        rt=new RecorderThread(lbq,ctx,fileName,message);
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss", Locale.US);
+//        Date date = new Date();
+//        String message=Recorder.toRecord+" "+dateFormat.format(date)+"\n\r";
+        rt = new RecorderThread(lbq,ctx,fileName);
         rt.start();
     }
     
@@ -55,18 +56,18 @@ public class Recorder {
 /**
  * Creates a thread to write to
  */
-class RecorderThread extends Thread{
+class RecorderThread extends Thread {
     private volatile Boolean stopped=false;
     private LinkedBlockingQueue<String> lbq;
     private Context ctx;
     private String fileName="";
-    private String recordingMessage;
+//    private String recordingMessage;
     
-    public RecorderThread(LinkedBlockingQueue<String> lbq,Context ctx,String fileName,String recordingMessage){
+    public RecorderThread(LinkedBlockingQueue<String> lbq,Context ctx,String fileName){
         this.lbq=lbq;
         this.ctx=ctx;
         this.fileName=fileName;
-        this.recordingMessage=recordingMessage;
+//        this.recordingMessage=recordingMessage;
     }
     
     public void shutdown(){
@@ -79,9 +80,8 @@ class RecorderThread extends Thread{
         try {
             @SuppressWarnings("deprecation")
             FileOutputStream outputStream= ctx.openFileOutput(this.fileName,
-                    Context.MODE_WORLD_WRITEABLE);
-            outputStream.write(recordingMessage.getBytes());
-            
+                    Context.MODE_WORLD_READABLE);
+//            outputStream.write(recordingMessage.getBytes());
             String toAdd;
             while (!stopped) {
                 try {
@@ -90,7 +90,7 @@ class RecorderThread extends Thread{
                 }
                 toAdd="";
                 while(lbq.size()>0){
-                    toAdd+=lbq.remove()+",";
+                    toAdd+=lbq.remove()+"\n";
                 }
                 outputStream.write(toAdd.getBytes());
             }

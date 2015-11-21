@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "edu.mit.dlab.ppganalyzer"
         minSdkVersion 14
-        targetSdkVersion 18
+        targetSdkVersion 19
 
         ndk {
             moduleName "pixelProcessor"

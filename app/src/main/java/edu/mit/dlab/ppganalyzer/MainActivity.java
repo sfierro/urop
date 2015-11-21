@@ -28,7 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.mit.dlab.ppganalyzer.util.GetCameraInfo;
@@ -48,6 +50,9 @@ public class MainActivity extends Activity {
     private SharedPreferences prefs;
     private int channel;
     private View myView;
+    private Button startButton;
+    Bundle extras;
+    boolean recordingStarted;
 
     private ProgressDialog _progressDialog;
     private int _progress = 0;
@@ -69,7 +74,6 @@ public class MainActivity extends Activity {
         viewfinder = null;
 
         setContentView(R.layout.activity_main);
-
         channel = ImageHandler.CHANNEL_RED;
 
         prefs = PreferenceManager
@@ -82,12 +86,14 @@ public class MainActivity extends Activity {
         mPreview = new Preview(this, (SurfaceView) findViewById(R.id.preview));
         getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        extras = getIntent().getExtras();
+
         myView = (View) findViewById(R.id.view);
         myView.bringToFront();
         TextView title = (TextView) findViewById(R.id.title);
         title.bringToFront();
         graphviewfinal.bringToFront();
-        Button startButton = (Button) findViewById(R.id.start_btn);
+        startButton = (Button) findViewById(R.id.start_btn);
         startButton.bringToFront();
         startButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -98,7 +104,7 @@ public class MainActivity extends Activity {
                 _progressHandler.sendEmptyMessage(0);
             }
         });
-
+        recordingStarted = false;
         /**
          * start progress thread
          */
@@ -106,16 +112,26 @@ public class MainActivity extends Activity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if(_progress>=26) {
-                    Bundle extras = getIntent().getExtras();
                     Intent in = new Intent(MainActivity.this,AnalyzeActivity.class);
                     in.putExtra("name",extras.getString("name"));
                     in.putExtra("id",extras.getString("id"));
                     in.putExtra("hr", graphviewfinal.getHeartRate(false));
                     vals = graphviewfinal.redValues;
+                    Recorder.stopRecording();
                     startActivity(in);
                 } else {
-
                     if (graphviewfinal.getHeartRate(false) > 40) {
+                        if (!recordingStarted) {
+                            Date d = new Date();
+                            Recorder.fileName = extras.getString("id")+"-waveforms-" + d.getYear() + "_" +
+                                    d.getMonth() + "_" + d.getDate();
+                            //"123-waveforms-2015_11_20"
+                            //pass that date as bundle extra
+//                            Recorder.fileName = extras.getString("id")+"-waveforms";
+//                            Recorder.fileName = "rawdatatest3";
+                            Recorder.startRecording();
+                            recordingStarted = true;
+                        }
                         _progress++;
                         _progressDialog.incrementProgressBy(4);
                     }
@@ -138,48 +154,48 @@ public class MainActivity extends Activity {
             }
         });
 
-        final ToggleButton recorderButton = (ToggleButton) findViewById(R.id.recorder_button);
-        recorderButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (recorderButton.isChecked()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(
-                            parent);
-                    builder.setTitle("Set File Name for Recording");
-                    // Set up the input
-                    final EditText input = new EditText(parent);
-                    input.setText(Recorder.baseFileName());
-                    // Specify the type of input expected; this, for example,
-                    // sets the input as a password, and will mask the text
-                    input.setInputType(InputType.TYPE_CLASS_TEXT);
-                    builder.setView(input);
-                    // Set up the buttons
-                    builder.setPositiveButton("Record",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                        int which) {
-                                    Recorder.fileName = input.getText()
-                                            .toString();
-                                    Recorder.startRecording();
-                                }
-                            });
-                    builder.setNegativeButton("Cancel",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                        int which) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                    builder.show();
-                }
-                else {
-                    Recorder.stopRecording();
-                }
-            }
-        });
+//        final ToggleButton recorderButton = (ToggleButton) findViewById(R.id.recorder_button);
+//        recorderButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (recorderButton.isChecked()) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(
+//                            parent);
+//                    builder.setTitle("Set File Name for Recording");
+//                    // Set up the input
+//                    final EditText input = new EditText(parent);
+//                    input.setText(Recorder.baseFileName());
+//                    // Specify the type of input expected; this, for example,
+//                    // sets the input as a password, and will mask the text
+//                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+//                    builder.setView(input);
+//                    // Set up the buttons
+//                    builder.setPositiveButton("Record",
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog,
+//                                        int which) {
+//                                    Recorder.fileName = input.getText()
+//                                            .toString();
+//                                    Recorder.startRecording();
+//                                }
+//                            });
+//                    builder.setNegativeButton("Cancel",
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog,
+//                                        int which) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//
+//                    builder.show();
+//                }
+//                else {
+//                    Recorder.stopRecording();
+//                }
+//            }
+//        });
 
     }
 
@@ -215,8 +231,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onResume() {
-        final ToggleButton recorderButton = (ToggleButton) findViewById(R.id.recorder_button);
-        recorderButton.setChecked(false);
+//        final ToggleButton recorderButton = (ToggleButton) findViewById(R.id.recorder_button);
+//        recorderButton.setChecked(false);
         super.onResume();
         if (mPreview != null && mPreview.getCamera() != null) {
             Parameters p = mPreview.getCamera().getParameters();

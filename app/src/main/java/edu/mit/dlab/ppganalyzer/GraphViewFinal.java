@@ -34,6 +34,8 @@ public class GraphViewFinal extends View {
     public static String[] verlabels;
 
     public List<Integer> redValues = new ArrayList<Integer>();
+    private List<Integer> greenValues = new ArrayList<Integer>();
+    private List<Integer> blueValues = new ArrayList<Integer>();
 
     private float width = 10.0f;
     private float graphheight;
@@ -47,6 +49,8 @@ public class GraphViewFinal extends View {
     float range = maximumPlottableValue;
 
     private boolean redPlotOn = true;
+    private boolean greenPlotOn = false;
+    private boolean bluePlotOn = false;
     private Boolean autoscale = true;
 
     private double incrementX, slowFactor;
@@ -138,6 +142,19 @@ public class GraphViewFinal extends View {
                 minY = Math.min(minY, Collections.min(redValues));
                 maxY = Math.max(maxY, Collections.max(redValues));
             }
+        }
+
+        synchronized (greenValues) {
+          if (greenPlotOn && greenValues.size() > 0) {
+              minY = Math.min(minY, Collections.min(greenValues));
+              maxY = Math.max(maxY, Collections.max(greenValues));
+          }
+        }
+        synchronized (blueValues) {
+          if (bluePlotOn && blueValues.size() > 0) {
+              minY = Math.min(minY, Collections.min(blueValues));
+              maxY = Math.max(maxY, Collections.max(blueValues));
+          }
         }
 
         if (maxY - minY < 2) {
@@ -236,6 +253,19 @@ public class GraphViewFinal extends View {
                 redValues.remove(0);
             }
         }
+
+        if (greenPlotOn) {
+          synchronized (greenValues) {
+              plot(greenValues, Color.GREEN);
+          }
+        }
+
+        if (bluePlotOn) {
+          synchronized (blueValues) {
+              plot(blueValues, Color.BLUE);
+          }
+        }
+
     }
 
     /*
@@ -258,6 +288,16 @@ public class GraphViewFinal extends View {
                     addPoint(points[0], redValues);
                 }
             }
+//            if (greenPlotOn || channel == ImageHandler.CHANNEL_GREEN) {
+//              synchronized (greenValues) {
+//                  addPoint(points[1], greenValues);
+//              }
+//            }
+//            if (bluePlotOn || channel == ImageHandler.CHANNEL_BLUE) {
+//              synchronized (blueValues) {
+//                  addPoint(points[2], blueValues);
+//              }
+//            }
         }
     };
 
@@ -303,6 +343,27 @@ public class GraphViewFinal extends View {
                 }
             }
             break;
+
+            case ImageHandler.CHANNEL_GREEN:
+          synchronized (greenValues) {
+              // Provide the fft algorithm with input that has a size that is a power of 2.
+              int size = (int)Math.pow(2, (int)Math.floor(Math.log(greenValues.size()) / Math.log(2)));
+              rawValues = new int[size];
+              for (int i = 0; i < size; i++) {
+                  rawValues[i] = greenValues.get(i);
+              }
+          }
+          break;
+        case ImageHandler.CHANNEL_BLUE:
+          synchronized (blueValues) {
+              // Provide the fft algorithm with input that has a size that is a power of 2.
+              int size = (int)Math.pow(2, (int)Math.floor(Math.log(blueValues.size()) / Math.log(2)));
+              rawValues = new int[size];
+              for (int i = 0; i < size; i++) {
+                  rawValues[i] = blueValues.get(i);
+              }
+          }
+          break;
 
         }
         // Filter the raw data
