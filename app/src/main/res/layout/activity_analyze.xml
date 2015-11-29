@@ -2,12 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="16dp">
+    android:layout_margin="16dp">
 
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="18dp"
         android:id="@+id/table">
 
         <TableRow
@@ -33,12 +32,29 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:text="Blood Pressure"
+                android:text="Heart Rate Variability"
                 android:textSize="20sp"
                 android:padding="15dp"/>
 
             <TextView
-                android:id="@+id/bp"
+                android:id="@+id/hrv"
+                android:textSize="20sp"
+                android:paddingLeft="15dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:text="Breathing Rate"
+                android:textSize="20sp"
+                android:padding="15dp"/>
+
+            <TextView
+                android:id="@+id/br"
                 android:textSize="20sp"
                 android:paddingLeft="15dp"/>
 
@@ -46,21 +62,21 @@
 
     </TableLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Data successfully saved..."
-        android:layout_above="@+id/ll"
-        />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/ll">
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data successfully saved..."
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                />
 
             <Button
                 android:layout_width="wrap_content"
@@ -68,7 +84,8 @@
                 android:text="Re-test"
                 android:textSize="12sp"
                 android:id="@+id/retest_btn"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:layout_toLeftOf="@+id/start_over_btn"/>
 
             <Button
                 android:layout_width="wrap_content"
@@ -76,9 +93,11 @@
                 android:text="New patient"
                 android:textSize="12sp"
                 android:id="@+id/start_over_btn"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
 </RelativeLayout>
