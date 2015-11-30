@@ -32,15 +32,6 @@ public class AnalyzeActivity extends Activity {
         hr = (TextView) findViewById(R.id.hr);
         hr.setText("" + num);
 
-//        Button exit = (Button)findViewById(R.id.quit_btn);
-//        exit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//                System.exit(0);
-//            }
-//        });
-
         Button retest = (Button)findViewById(R.id.retest_btn);
         retest.setOnClickListener(new View.OnClickListener() {
             @Override

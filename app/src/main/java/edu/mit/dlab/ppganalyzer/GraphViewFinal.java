@@ -244,7 +244,8 @@ public class GraphViewFinal extends View {
      */
     private void calculatePlottingVariables(int width) {
 
-        bufferSize = (int)Math.pow(2, 10);
+//        bufferSize = (int)Math.pow(2, 10);
+        bufferSize = (int)Math.pow(2, 9);
         incrementX = 1.0 * width / bufferSize;
 
         synchronized (redValues) {

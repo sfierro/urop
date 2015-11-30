@@ -64,7 +64,6 @@ public class ImageHandler extends Thread {
             try {
                 if ((s = queue.take()) != null) {
                     long time = s.time;
-
                     int[] RGB = process(s.data, s.height, s.width);
                     int R = RGB[0];
                     int G = RGB[1];
@@ -88,16 +87,16 @@ public class ImageHandler extends Thread {
                                 int blue = ((int) (slopeB * x + lastB));
 
                                 graphviewfinal.updateGraph(red);
+                                Recorder.recordString("" + lastTimeInterval + "," + Integer.toString(red)
+                                        + "," + Integer.toString(green) + "," + Integer.toString(blue));
                                 lastTimeInterval += TIME_STEP;
-                                Recorder.recordString("" + new Date().getTime() + "," + Integer.toString(red)
-                                + "," + Integer.toString(green) + "," + Integer.toString(blue));
                             }
                         }
                     } else {
+                        Recorder.recordString("" + lastTimeInterval + "," + Integer.toString(R)
+                                + "," + Integer.toString(G) + "," + Integer.toString(B));
                         lastTimeInterval = time;
                         graphviewfinal.updateGraph(R);
-                        Recorder.recordString("" + new Date().getTime() + "," + Integer.toString(R)
-                        + "," + Integer.toString(G) + "," + Integer.toString(B));
                     }
 
                     lastTime = time;

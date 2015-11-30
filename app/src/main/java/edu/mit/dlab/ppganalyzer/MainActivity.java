@@ -29,7 +29,10 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -122,13 +125,9 @@ public class MainActivity extends Activity {
                 } else {
                     if (graphviewfinal.getHeartRate(false) > 40) {
                         if (!recordingStarted) {
-                            Date d = new Date();
-                            Recorder.fileName = extras.getString("id")+"-waveforms-" + d.getYear() + "_" +
-                                    d.getMonth() + "_" + d.getDate();
-                            //"123-waveforms-2015_11_20"
-                            //pass that date as bundle extra
-//                            Recorder.fileName = extras.getString("id")+"-waveforms";
-//                            Recorder.fileName = "rawdatatest3";
+                            final Calendar c = Calendar.getInstance();
+                            Recorder.fileName = extras.getString("id")+"-waveforms-" + c.get(Calendar.YEAR) + "_" +
+                                    (c.get(Calendar.MONTH)+1) + "_" + c.get(Calendar.DAY_OF_MONTH);
                             Recorder.startRecording();
                             recordingStarted = true;
                         }
@@ -136,7 +135,6 @@ public class MainActivity extends Activity {
                         _progressDialog.incrementProgressBy(4);
                     }
                     _progressHandler.sendEmptyMessageDelayed(0, 1000);
-//                    _progressHandler.sendEmptyMessageDelayed(0, 100);
                 }
             }
         };
