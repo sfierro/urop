@@ -12,6 +12,7 @@ import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -24,11 +25,13 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,9 +60,10 @@ public class MainActivity extends Activity {
     Bundle extras;
     boolean recordingStarted;
 
-    private ProgressDialog _progressDialog;
-    private int _progress = 0;
-    private Handler _progressHandler;
+    private Button cancel;
+    private ProgressBar progress;
+    private TextView percent;
+    private static final int recordingTime = 30;
 
     public static Boolean plotRaw = true;
 
@@ -75,6 +79,7 @@ public class MainActivity extends Activity {
 
         previewSize = null;
         viewfinder = null;
+        recordingStarted = false;
 
         setContentView(R.layout.activity_main);
         channel = ImageHandler.CHANNEL_RED;
@@ -90,9 +95,26 @@ public class MainActivity extends Activity {
         getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         extras = getIntent().getExtras();
+        cancel = (Button) findViewById(R.id.cancel);
 
+        cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bool = true;
+                pressed = true;
+                Recorder.stopRecording();
+                progress.setProgress(0);
+                percent.setText("0%");
+                msgHandler.removeMessages(UPDATE_PROGRESS);
+                startButton.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.GONE);
+                percent.setVisibility(View.GONE);
+                cancel.setVisibility(View.GONE);
+            }
+        });
         myView = (View) findViewById(R.id.view);
         myView.bringToFront();
+        cancel.bringToFront();
         TextView title = (TextView) findViewById(R.id.title);
         title.bringToFront();
         graphviewfinal.bringToFront();
@@ -101,43 +123,16 @@ public class MainActivity extends Activity {
         startButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(1);
-                _progress = 0;
-                _progressDialog.setProgress(0);
-                _progressHandler.sendEmptyMessage(0);
+                startButton.setVisibility(View.GONE);
+                progress.setVisibility(View.VISIBLE);
+                percent.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.VISIBLE);
+                progress.setProgress(0);
+                msgHandler.sendEmptyMessageDelayed(UPDATE_PROGRESS, 1000);
+                TextView textView = (TextView) findViewById(R.id.title);
+                textView.setText("Recording... Please wait");
             }
         });
-        recordingStarted = false;
-        /**
-         * start progress thread
-         */
-        _progressHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if(_progress>=26) {
-                    Intent in = new Intent(MainActivity.this,AnalyzeActivity.class);
-                    in.putExtra("name",extras.getString("name"));
-                    in.putExtra("id",extras.getString("id"));
-                    in.putExtra("hr", graphviewfinal.getHeartRate(false));
-                    vals = graphviewfinal.redValues;
-                    Recorder.stopRecording();
-                    startActivity(in);
-                } else {
-                    if (graphviewfinal.getHeartRate(false) > 40) {
-                        if (!recordingStarted) {
-                            final Calendar c = Calendar.getInstance();
-                            Recorder.fileName = extras.getString("id")+"-waveforms-" + c.get(Calendar.YEAR) + "_" +
-                                    (c.get(Calendar.MONTH)+1) + "_" + c.get(Calendar.DAY_OF_MONTH);
-                            Recorder.startRecording();
-                            recordingStarted = true;
-                        }
-                        _progress++;
-                        _progressDialog.incrementProgressBy(4);
-                    }
-                    _progressHandler.sendEmptyMessageDelayed(0, 1000);
-                }
-            }
-        };
 
         Button heartRateButton = (Button) findViewById(R.id.heart_rate_button);
         final MainActivity parent = this;
@@ -152,85 +147,77 @@ public class MainActivity extends Activity {
             }
         });
 
-//        final ToggleButton recorderButton = (ToggleButton) findViewById(R.id.recorder_button);
-//        recorderButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (recorderButton.isChecked()) {
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(
-//                            parent);
-//                    builder.setTitle("Set File Name for Recording");
-//                    // Set up the input
-//                    final EditText input = new EditText(parent);
-//                    input.setText(Recorder.baseFileName());
-//                    // Specify the type of input expected; this, for example,
-//                    // sets the input as a password, and will mask the text
-//                    input.setInputType(InputType.TYPE_CLASS_TEXT);
-//                    builder.setView(input);
-//                    // Set up the buttons
-//                    builder.setPositiveButton("Record",
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog,
-//                                        int which) {
-//                                    Recorder.fileName = input.getText()
-//                                            .toString();
-//                                    Recorder.startRecording();
-//                                }
-//                            });
-//                    builder.setNegativeButton("Cancel",
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog,
-//                                        int which) {
-//                                    dialog.cancel();
-//                                }
-//                            });
-//
-//                    builder.show();
-//                }
-//                else {
-//                    Recorder.stopRecording();
-//                }
-//            }
-//        });
+        progress = (ProgressBar) findViewById(R.id.progressBar);
+        progress.setMax(recordingTime);
+        progress.bringToFront();
+        percent = (TextView) findViewById(R.id.percent);
+        percent.bringToFront();
 
+    }
+    private boolean pressed = false;
+    private boolean bool = true;
+    /**
+     * updates progress bar when recording
+     */
+    private void updateProgress() {
+        progress.setProgress(progress.getProgress() + 1);
+        percent.setText((int)((progress.getProgress() * 100)/progress.getMax()) + "%");
+
+        if (progress.getProgress() >= progress.getMax()) {
+            Intent in = new Intent(MainActivity.this,AnalyzeActivity.class);
+            in.putExtra("name",extras.getString("name"));
+            in.putExtra("id",extras.getString("id"));
+            in.putExtra("hr", graphviewfinal.getHeartRate(false));
+            vals = graphviewfinal.redValues;
+            Recorder.stopRecording();
+            msgHandler.removeMessages(UPDATE_PROGRESS);
+            startActivity(in);
+
+        } else {
+            if (!recordingStarted) {
+                final Calendar c = Calendar.getInstance();
+                String filepath = Environment.getExternalStorageDirectory().getPath();
+                File file = new File(filepath, extras.getString("id"));
+                if (!file.exists()) file.mkdirs();
+                File saveFile = new File(file, "-waveforms-" + c.get(Calendar.YEAR) + "_" +
+                        (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.DAY_OF_MONTH));
+                Recorder.filePath = saveFile.getAbsolutePath();
+                Recorder.fileName = extras.getString("id") + "-waveforms-" + c.get(Calendar.YEAR) + "_" +
+                        (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.DAY_OF_MONTH);
+                try {
+                Recorder.startRecording();} catch (FileNotFoundException e) {
+
+                }
+                recordingStarted = true;
+            }
+            if (!(ImageHandler.fingerOn) && bool) {
+                Toast.makeText(MainActivity.this,"Please keep finger on camera",Toast.LENGTH_LONG).show();
+                bool = false;
+            }
+            if (!pressed) {
+                msgHandler.sendEmptyMessageDelayed(UPDATE_PROGRESS, 1000);
+            }
+
+        }
     }
 
     /**
-     * create dialog for taking heart rate
+     * handler for updating progress bar
      */
-    @Deprecated
-    protected Dialog onCreateDialog(int i) {
-
-        _progressDialog = new ProgressDialog(this);
-
-        _progressDialog.setIcon(R.drawable.heartsmall);
-
-        _progressDialog.setTitle("Recording, please wait");
-        _progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        _progressDialog.setProgressNumberFormat(null);
-        _progressDialog.setProgressPercentFormat(null);
-        _progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                _progressHandler.removeMessages(0);
-                _progressDialog.dismiss();
-//                Toast.makeText(
-//                        MainActivity.this,
-//                        ""
-//                                + graphviewfinal.getHeartRate(false),
-//                        Toast.LENGTH_SHORT).show();
+    private static final int UPDATE_PROGRESS = 1;
+    private Handler msgHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case UPDATE_PROGRESS:
+                    updateProgress();
+                    break;
             }
-        });
-        return _progressDialog;
-    }
+        }
+    };
 
     @Override
     protected void onResume() {
-//        final ToggleButton recorderButton = (ToggleButton) findViewById(R.id.recorder_button);
-//        recorderButton.setChecked(false);
         super.onResume();
         if (mPreview != null && mPreview.getCamera() != null) {
             Parameters p = mPreview.getCamera().getParameters();

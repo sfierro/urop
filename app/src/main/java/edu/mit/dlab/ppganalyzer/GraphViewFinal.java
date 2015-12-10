@@ -245,7 +245,7 @@ public class GraphViewFinal extends View {
     private void calculatePlottingVariables(int width) {
 
 //        bufferSize = (int)Math.pow(2, 10);
-        bufferSize = (int)Math.pow(2, 9);
+        bufferSize = (int)Math.pow(2, 8.5);
         incrementX = 1.0 * width / bufferSize;
 
         synchronized (redValues) {
@@ -289,16 +289,6 @@ public class GraphViewFinal extends View {
                     addPoint(points[0], redValues);
                 }
             }
-//            if (greenPlotOn || channel == ImageHandler.CHANNEL_GREEN) {
-//              synchronized (greenValues) {
-//                  addPoint(points[1], greenValues);
-//              }
-//            }
-//            if (bluePlotOn || channel == ImageHandler.CHANNEL_BLUE) {
-//              synchronized (blueValues) {
-//                  addPoint(points[2], blueValues);
-//              }
-//            }
         }
     };
 

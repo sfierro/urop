@@ -18,6 +18,7 @@ public class ImageHandler extends Thread {
     static final int CHANNEL_RED = 0;
     static final int CHANNEL_GREEN = 1;
     static final int CHANNEL_BLUE = 2;
+    public static boolean fingerOn = true;
 
     public native int[] process(byte[] data, int height, int width);
     public static native double getRadius();
@@ -87,15 +88,23 @@ public class ImageHandler extends Thread {
                                 int blue = ((int) (slopeB * x + lastB));
 
                                 graphviewfinal.updateGraph(red);
-                                Recorder.recordString("" + lastTimeInterval + "," + Integer.toString(red)
-                                        + "," + Integer.toString(green) + "," + Integer.toString(blue));
+                                if (red < 15000) {
+                                    fingerOn = false;
+                                }
+                                    Recorder.recordString("" + lastTimeInterval + "," + Integer.toString(red)
+                                            + "," + Integer.toString(green) + "," + Integer.toString(blue));
                                 lastTimeInterval += TIME_STEP;
                             }
                         }
                     } else {
-                        Recorder.recordString("" + lastTimeInterval + "," + Integer.toString(R)
-                                + "," + Integer.toString(G) + "," + Integer.toString(B));
-                        lastTimeInterval = time;
+                        if (R < 15000) {
+                            fingerOn = false;
+                        } else {
+//                            fingerOn = true;
+                        }
+                            Recorder.recordString("" + lastTimeInterval + "," + Integer.toString(R)
+                                    + "," + Integer.toString(G) + "," + Integer.toString(B));
+                            lastTimeInterval = time;
                         graphviewfinal.updateGraph(R);
                     }
 

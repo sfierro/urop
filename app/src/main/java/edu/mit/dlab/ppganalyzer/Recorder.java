@@ -1,6 +1,8 @@
 package edu.mit.dlab.ppganalyzer;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,17 +20,21 @@ public class Recorder {
     static String fileName="";
     static String toRecord="RawData";
     static RecorderThread rt=null;
+    static String filePath = "";
+
+
     
     public Recorder(){}
 
     static public void setContext(Context ctx){
         Recorder.ctx=ctx;
     }
-    static public void startRecording(){
+    static public void startRecording() throws FileNotFoundException{
+
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss", Locale.US);
 //        Date date = new Date();
 //        String message=Recorder.toRecord+" "+dateFormat.format(date)+"\n\r";
-        rt = new RecorderThread(lbq,ctx,fileName);
+        rt = new RecorderThread(lbq,ctx,fileName,filePath);
         rt.start();
     }
     
@@ -62,11 +68,15 @@ class RecorderThread extends Thread {
     private Context ctx;
     private String fileName="";
 //    private String recordingMessage;
+
+    // Output file path
+    private String filePath = null;
     
-    public RecorderThread(LinkedBlockingQueue<String> lbq,Context ctx,String fileName){
+    public RecorderThread(LinkedBlockingQueue<String> lbq,Context ctx,String fileName,String filePath){
         this.lbq=lbq;
         this.ctx=ctx;
         this.fileName=fileName;
+        this.filePath=filePath;
 //        this.recordingMessage=recordingMessage;
     }
     
@@ -82,6 +92,7 @@ class RecorderThread extends Thread {
             FileOutputStream outputStream= ctx.openFileOutput(this.fileName,
                     Context.MODE_WORLD_READABLE);
 //            outputStream.write(recordingMessage.getBytes());
+            BufferedOutputStream mOutputStream = new BufferedOutputStream(new FileOutputStream(filePath));
             String toAdd;
             while (!stopped) {
                 try {
@@ -92,11 +103,17 @@ class RecorderThread extends Thread {
                 while(lbq.size()>0){
                     toAdd+=lbq.remove()+"\n";
                 }
+                mOutputStream.write(toAdd.getBytes());
                 outputStream.write(toAdd.getBytes());
             }
             outputStream.close();
+            mOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
+
+
 }

@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:background="#0099cc"
     android:id="@+id/enclosing_frame"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    >
 
     <View
         android:layout_width="fill_parent"
@@ -42,10 +43,45 @@
       android:id="@+id/graphviewfinal2"
       android:layout_width="200dp"
       android:layout_height="80dp"
-      android:layout_alignParentBottom="true"
+      android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_marginRight="15dp"
       android:background="@color/White"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/graphviewfinal2"
+        android:id="@+id/cancel"
+        android:text="Cancel"
+        android:visibility="gone"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"
+        android:text="0%"
+        android:visibility="gone"
+        android:minWidth="40dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/percent"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/percent" />
 
     <Button
         android:id="@+id/heart_rate_button"
@@ -73,8 +109,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
         android:text="Record"
+        android:layout_marginBottom="15dp"
         android:textSize="25sp"
         android:padding="35dp"
         android:background="@drawable/startbutton"/>
@@ -82,9 +119,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PPG Analyzer"
+        android:text="Press record when ready"
         android:id="@+id/title"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:layout_centerHorizontal="true"
         android:layout_margin="40dp"
         android:textStyle="bold"/>
