@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/samfierro/Documents/PPGAnalyzer/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/samfierro/Documents/UROP/PPGAnalyzer/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string-array name="channel_options">
 		<item>Red</item>
 		<item>Green</item>
 		<item>Blue</item>
 	</string-array>
-    <!-- From: file:/Users/samfierro/Documents/PPGAnalyzer/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/samfierro/Documents/UROP/PPGAnalyzer/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="AliceBlue">#F0F8FF</color>
     <color name="AntiqueWhite">#FAEBD7</color>
@@ -155,7 +155,7 @@
     <color name="viewfinder_laser">#ffff0000</color>
     <color name="viewfinder_mask">#A0000000</color>
     <declare-styleable name="ButtonBarContainerTheme"><attr format="reference" name="buttonBarStyle"/><attr format="reference" name="buttonBarButtonStyle"/></declare-styleable>
-    <!-- From: file:/Users/samfierro/Documents/PPGAnalyzer/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/samfierro/Documents/UROP/PPGAnalyzer/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">Neonatal Screener</string>
     <string name="button_cancel">Cancel</string>
@@ -241,7 +241,7 @@
     <string name="view_circ_25">25% View</string>
     <string name="view_circ_50">50% View</string>
     <string name="view_circ_75">75% View</string>
-    <!-- From: file:/Users/samfierro/Documents/PPGAnalyzer/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/samfierro/Documents/UROP/PPGAnalyzer/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--

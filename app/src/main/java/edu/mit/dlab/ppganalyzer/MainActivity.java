@@ -181,8 +181,10 @@ public class MainActivity extends Activity {
                 if (!file.exists()) file.mkdirs();
                 File file2 = new File(file, extras.getString("id"));
                 if (!file2.exists()) file2.mkdirs();
-                File saveFile = new File(file2, "waveforms-" + c.get(Calendar.YEAR) + "_" +
-                        (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.DAY_OF_MONTH));
+                File file3 = new File(file2, extras.getString("" + c.get(Calendar.YEAR) + "_" +
+                        (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.DAY_OF_MONTH)));
+                if (!file3.exists()) file3.mkdirs();
+                File saveFile = new File(file3, "waveforms-" + System.currentTimeMillis());
                 Recorder.filePath = saveFile.getAbsolutePath();
                 Recorder.fileName = extras.getString("id") + "-waveforms-" + c.get(Calendar.YEAR) + "_" +
                         (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.DAY_OF_MONTH);
