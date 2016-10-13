@@ -1,1 +1,3 @@
 # ppg
+
+This is an android app that I worked on, improved, and ultimately finished so it could be used in India for research purposes after another undergrad implemented basic functionality. Uses the back camera of the phone with flash to obtain the (r,g,b) time series of the finger pressed against the camera to analyze/process to make a photoplethysmogram. PPG waveformed is displayed on the screen while taking the heart rate while a progress bar makes sure it is obtaining valid data for the right amount of time. Heart rate is then calculated from this PPG waveform. These (r,g,b) time series of each PPG measurement are saved as files on the Android device, and can be viewed by the user from the main screen.
